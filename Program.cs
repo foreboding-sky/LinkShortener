@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddTransient<LinkShortenerService>();
+builder.Services.AddTransient<DbInitializer>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=InforceTestingAppDB;Username=postgres;Password=25112002"));
 builder.Services.AddTransient<ILinksRepository, LinksRepository>();
