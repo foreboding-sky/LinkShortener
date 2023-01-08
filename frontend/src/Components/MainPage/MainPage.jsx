@@ -34,6 +34,8 @@ const MainPage = () => {
         },
     ];
 
+    const authorized = true;
+
 
     return (
         <Table dataSource={data}>
@@ -41,7 +43,7 @@ const MainPage = () => {
                 <Column title="Long Url" dataIndex="longLink" key="longLink" />
                 <Column title="Short Url" dataIndex="shortLink" key="shortLink" />
             </ColumnGroup>
-            <Column
+            {authorized && <Column
                 title="Delete Link"
                 key="action"
                 width={"200px"}
@@ -50,7 +52,8 @@ const MainPage = () => {
                         <a>Delete</a>
                     </Space>
                 )}
-            />
+            />}
+
         </Table>);
 }
 
