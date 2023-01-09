@@ -13,7 +13,7 @@ const Login
 
         let navigate = useNavigate();
         return (
-            <div>
+            <div style={{ width: 500, margin: "auto" }}>
                 <Input onChange={(e) => { setUserName(e.target.value) }}
                     style={{ marginTop: "5px" }}
                     placeholder="Username"
