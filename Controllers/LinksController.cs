@@ -71,6 +71,11 @@ namespace InforceTestingApp.Controllers
             Link link = mapper.Map<Link>(linkDto);
             link.CreatedBy = user;
             link.CreatedDate = DateTime.UtcNow;
+            Link tmp = await repository.GetLinkByLong(link.LongLink);
+            if (tmp != default(Link))
+            {
+                return Ok(linkShortener.GetShortLink(link));
+            }
             await repository.CreateLink(link);
             return Ok(linkShortener.GetShortLink(link));
         }

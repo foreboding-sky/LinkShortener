@@ -52,7 +52,7 @@ namespace InforceTestingApp.Data
 
         public async Task<Link> GetLinkByLong(string longLink)
         {
-            return await context.Links.Where(l => l.LongLink == longLink).FirstAsync();
+            return await context.Links.FirstOrDefaultAsync(l => l.LongLink == longLink);
         }
     }
 }
