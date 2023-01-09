@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import { InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Input, Tooltip } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +7,7 @@ const Register
         return (
             <div>
                 <Input
+                    style={{ marginTop: "5px" }}
                     placeholder="Username"
                     suffix={
                         <Tooltip title="Enter your username">
@@ -16,13 +16,13 @@ const Register
                     }
                 />
 
-                <Input.Password placeholder="Input password" />
-                <Input.Password placeholder="Repeat password" />
+                <Input.Password placeholder="Input password" style={{ marginTop: "5px" }} />
+                <Input.Password placeholder="Repeat password" style={{ marginTop: "5px" }} />
 
-                <Button type="primary" block>
+                <Button type="primary" block style={{ marginTop: "5px" }}>
                     REGISTER
                 </Button>
-                <Button type="primary" block onClick={() => navigate("*")}>
+                <Button type="primary" block style={{ marginTop: "5px" }} onClick={() => navigate("*")}>
                     LOGIN
                 </Button>
             </div>

@@ -37,17 +37,17 @@ namespace InforceTestingApp.Controllers
             return Ok(mapper.Map<IEnumerable<LinkReadDto>>(links));
         }
 
-        [HttpGet("ById")]
+        [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> GetLink([FromQuery] Guid id)
+        public async Task<IActionResult> GetLink(Guid id)
         {
             var link = await repository.GetLinkById(id);
             return Ok(mapper.Map<LinkReadDto>(link));
         }
 
-        [HttpDelete("Delete")]
+        [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteLink([FromQuery] Guid id)
+        public async Task<IActionResult> DeleteLink(Guid id)
         {
             var user = await userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             var isAdmin = await userManager.IsInRoleAsync(user, "Administrator");

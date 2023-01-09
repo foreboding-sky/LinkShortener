@@ -13,18 +13,22 @@ using System.Reflection;
 using AutoMapper;
 using InforceTestingApp.Services;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddTransient<LinkShortenerService>();
-builder.Services.AddTransient<DbInitializer>();
-builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=InforceTestingAppDB;Username=postgres;Password=25112002"));
-builder.Services.AddTransient<ILinksRepository, LinksRepository>();
-builder.Services.AddControllersWithViews(options => options.Filters.Add(new ValidationFilter()));
+//builder.Services.AddControllersWithViews(options => options.Filters.Add(new ValidationFilter()));
+
+builder.Services.AddMvc(
+       options =>
+       {
+           options.EnableEndpointRouting = false;
+           options.Filters.Add(new ValidationFilter());
+       });
+
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddFluentValidationAutoValidation();
+
 builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = true;
@@ -66,7 +70,14 @@ builder.Services.AddAuthentication(options =>
                     };
                 });
 
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql("Host=localhost;Port=5432;Database=InforceTestingAppDB;Username=postgres;Password=25112002"));
+builder.Services.AddTransient<ILinksRepository, LinksRepository>();
+builder.Services.AddTransient<LinkShortenerService>();
+builder.Services.AddTransient<DbInitializer>();
 
+builder.Services.AddControllers();
+builder.Services.AddSpaStaticFiles(options => options.RootPath = "frontent/build");
 
 var app = builder.Build();
 
@@ -78,22 +89,43 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseSpaStaticFiles();
 
 app.UseRouting();
+//app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+           {
+               endpoints.MapControllers();
+           });
 
 using (var scope = app.Services.CreateScope())
 {
     var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
     await dbInitializer.Populate();
 }
+
+app.UseSpa(spa =>
+ {
+     spa.Options.SourcePath = "frontend";
+     if (builder.Environment.IsDevelopment())
+     {
+         spa.UseReactDevelopmentServer(npmScript: "start");
+     }
+ });
+
+app.UseCors("AllowAll");
+
+app.UseCors(builder =>
+            builder
+            .WithOrigins("https://localhost:5000", "http://localhost:3000", "http://localhost:5157")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+);
 
 app.Run();
