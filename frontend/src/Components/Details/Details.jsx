@@ -16,11 +16,12 @@ const Details = ({ }) => {
     const [item, setItem] = useState({});
 
     return (
-        <Card title={"Link info"} style={{ width: 300, margin: "auto" }}>
+        <Card title={"Link info"} style={{ width: 500, margin: "auto" }}>
             <p>Link: {item?.longLink}</p>
             <p>Short link: {item?.shortLink}</p>
-            <p>Created by: {item?.createdBy?.userName}</p>
-            <p>Date created: {item?.dateCreated}</p>
+            <p>Created by: {item?.createdBy}</p>
+            <p>Date created: {item?.createdDate}</p>
+            {console.log(item)}
         </Card>
     );
 }
