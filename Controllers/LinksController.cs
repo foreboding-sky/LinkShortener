@@ -54,7 +54,7 @@ namespace InforceTestingApp.Controllers
             if ((await repository.GetLinkById(id)).CreatedBy.Id == user.Id || isAdmin)
             {
                 await repository.DeleteLink(id);
-                return Ok(await repository.GetAllLinks());
+                return Ok();
             }
             return BadRequest();
         }

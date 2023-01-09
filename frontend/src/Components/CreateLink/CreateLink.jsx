@@ -1,7 +1,17 @@
 import { InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Input, Tooltip } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 const CreateLink = () => {
+
+    const [link, setLink] = useState('');
+
+    const Create = () => {
+        axios.post("/api/Links", { LongLink: link }).then(res => { navigate('*') }).catch((error) => { console.log(error) })
+    };
+    let navigate = useNavigate();
     return (
         <div style={{
             width: "500px",
@@ -12,6 +22,7 @@ const CreateLink = () => {
                 Entry your URL here:
             </label>
             <Input
+                onChange={(e) => { setLink(e.target.value) }}
                 placeholder="Enter your URL"
                 style={{
                     marginTop: "10px",
@@ -23,7 +34,7 @@ const CreateLink = () => {
                 }
             />
 
-            <Button type="primary" block style={{ marginTop: "10px" }}>
+            <Button type="primary" block onClick={() => { Create() }} style={{ marginTop: "10px" }}>
                 Create
             </Button>
             {/* <Button type="primary" block onClick={() => navigate("/register")}>
